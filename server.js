@@ -8,13 +8,16 @@ app.use(express.json());
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: ['https://paystack-frontend-test.vercel.app'],
+  origin: ['http://localhost:3000', 'https://paystack-frontend-test.vercel.app', 'https://your-production-frontend-url.com'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
+
+// Handle preflight requests
+app.options('*', cors());
 
 // Initialize Transaction API
 app.post('/api/initialize-transaction', async (req, res) => {
