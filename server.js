@@ -7,17 +7,17 @@ const app = express();
 app.use(express.json());
 
 // Enhanced CORS configuration
-app.use(cors({
+const corsOptions = {
   origin: ['http://localhost:3000', 'https://paystack-frontend-test.vercel.app', 'https://your-production-frontend-url.com'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
-}));
+};
 
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
+app.use(cors(corsOptions));
 
 // Handle preflight requests
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
