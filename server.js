@@ -19,6 +19,11 @@ const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 // Handle preflight requests
 app.options('*', cors());
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'Server is running' });
+});
+
 // Initialize Transaction API
 app.post('/api/initialize-transaction', async (req, res) => {
   const { email, amount } = req.body;
@@ -36,7 +41,7 @@ app.post('/api/initialize-transaction', async (req, res) => {
     );
     res.json(response.data.data);
   } catch (err) {
-    console.error(err.response?.data || err);
+    console.error('Error initializing transaction:', err.response?.data || err);
     res.status(500).json({ error: 'Transaction initialization failed' });
   }
 });
@@ -52,7 +57,7 @@ app.get('/api/verify-transaction/:reference', async (req, res) => {
     );
     res.json(response.data.data); // Return transaction status
   } catch (err) {
-    console.error(err.response?.data || err);
+    console.error('Error verifying transaction:', err.response?.data || err);
     res.status(500).json({ error: 'Transaction verification failed' });
   }
 });
