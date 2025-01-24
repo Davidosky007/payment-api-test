@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://paystack-frontend-test.vercel.app', 'https://your-production-frontend-url.com'],
+  origin: ['https://paystack-frontend-test.vercel.app'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -37,6 +37,7 @@ app.post('/api/initialize-transaction', async (req, res) => {
     res.status(500).json({ error: 'Transaction initialization failed' });
   }
 });
+
 // Verify Transaction API
 app.get('/api/verify-transaction/:reference', async (req, res) => {
   const { reference } = req.params;
@@ -48,7 +49,7 @@ app.get('/api/verify-transaction/:reference', async (req, res) => {
     );
     res.json(response.data.data); // Return transaction status
   } catch (err) {
-    console.error(err.response.data);
+    console.error(err.response?.data || err);
     res.status(500).json({ error: 'Transaction verification failed' });
   }
 });
