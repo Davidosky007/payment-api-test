@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Enhanced CORS configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://paystack-frontend-test.vercel.app'],
+  origin: ['http://localhost:3000', 'https://paystack-frontend-test.vercel.app', 'https://your-production-frontend-url.com'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
