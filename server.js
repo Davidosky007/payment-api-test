@@ -5,7 +5,14 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+// Enhanced CORS configuration
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://your-frontend-domain.com'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
@@ -17,15 +24,19 @@ app.post('/api/initialize-transaction', async (req, res) => {
     const response = await axios.post(
       'https://api.paystack.co/transaction/initialize',
       { email, amount },
-      { headers: { Authorization: `Bearer ${PAYSTACK_SECRET_KEY}` } }
+      { 
+        headers: { 
+          Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
+          'Content-Type': 'application/json'
+        } 
+      }
     );
-    res.json(response.data.data); // Return authorization_url
+    res.json(response.data.data);
   } catch (err) {
-    console.error(err.response.data);
+    console.error(err.response?.data || err);
     res.status(500).json({ error: 'Transaction initialization failed' });
   }
 });
-
 // Verify Transaction API
 app.get('/api/verify-transaction/:reference', async (req, res) => {
   const { reference } = req.params;
